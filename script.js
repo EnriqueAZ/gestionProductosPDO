@@ -51,7 +51,7 @@ function respuestaMostrar() {
 
 // Envio de la información al servidor y la bd
 function enviarProducto() {
-    ajax.open("GET", "agregarproducto.html" + obtenerQueryProducto(), true);
+    ajax.open("GET", "agregarproducto.php?" + obtenerQueryProducto(), true);
     ajax.onreadystatechange = respuestaAgregar;
     ajax.send();    
 }
@@ -67,7 +67,7 @@ function obtenerQueryProducto() {
     var id = document.getElementById("id").value;
     var nombre = document.getElementById("nombre").value;
     var cantidad = document.getElementById("cantidad").value;
-    var queryString = "id=" + encodeURIComponent(id) + "&nombre=" + encodeURIComponent(nombre) + "&cantidad=" + encodeURIComponent(cantidad) + "&nocache" + Math.random();
+    var queryString = "id=" + encodeURIComponent(id) + "&nombre=" + encodeURIComponent(nombre) + "&cantidad=" + encodeURIComponent(cantidad) + "&nocache=" + Math.random();
     return queryString;
 }
 
@@ -156,21 +156,11 @@ function respuestaTablaActualizar() {
 
 // Función para cargar los datos de los productos
 function cargarDatosActualizar(productos) {
-    tabla = document.getElementById("tabla");
+    select = document.getElementById("nombre");
     for (var i = 0; i < productos.length; i++) {
-        var fila = document.createElement("select");
-        tabla.appendChild(fila);
-        var celda1 = document.createElement("td");
-        fila.appendChild(celda1);
-        var id = document.createTextNode(productos[i].id);
-        celda1.appendChild(id);
-        var celda2 = document.createElement("td");
-        fila.appendChild(celda2);
+        var option = document.createElement("option");
+        select.appendChild(option);
         var nombre = document.createTextNode(productos[i].nombre);
-        celda2.appendChild(nombre);
-        var celda3 = document.createElement("td");
-        fila.appendChild(celda3);
-        var cantidad = document.createTextNode(productos[i].cantidad);
-        celda3.appendChild(cantidad);
+        option.appendChild(nombre);
     }
 }

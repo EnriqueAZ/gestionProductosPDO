@@ -7,10 +7,10 @@
     de la conexión, con == 0 devolverá un boolean.
     Creo funcionará más en una condición*/
     $conexion->abrir() == 0;
-    $id = $_GET['id'];
-    $nombre = $_GET['nombre'];
-    $cantidad = $_GET['cantidad'];
-    $sql = "INSERT INTO productos VALUES ($id, 'nombre', $cantidad)";
+    $id = $_GET["id"];
+    $nombre = $_GET["nombre"];
+    $cantidad = $_GET["cantidad"];
+    $sql = "INSERT INTO productos VALUES ($id, '$nombre', $cantidad)";
     /* ___________________________ */
     /* Enviará a la función consulta de la conexión
     el insert */
@@ -22,7 +22,7 @@
     las filas afectadas mayores o no a 0 */
     if ($conexion->obtenerFilasAfectadas() > 0) {
         $respuesta["accion"] = 1;
-        $respuesta["mensaje"] = "Productos insertados con exito";
+        $respuesta["mensaje"] = "Producto insertado con exito";
     } else {
         $respuesta["accion"] = 0;
         $respuesta["mensaje"] = "Producto no pudo ser insertado";
