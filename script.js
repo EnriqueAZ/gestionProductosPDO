@@ -157,10 +157,49 @@ function respuestaTablaActualizar() {
 // Función para cargar los datos de los productos
 function cargarDatosActualizar(productos) {
     select = document.getElementById("nombre");
+
+    input = document.getElementById("cantidad");
     for (var i = 0; i < productos.length; i++) {
         var option = document.createElement("option");
         select.appendChild(option);
+        option.value = i;
         var nombre = document.createTextNode(productos[i].nombre);
-        option.appendChild(nombre);
+        option.appendChild(nombre);   
     }
+    /* ______________________________________________________*/
+    /* addEvenListener para obtener el index de los elmentos
+    y asinar el valor en el input que corresponde en la bd */
+    
+    select.addEventListener('change',
+    function(){
+        var selectedOption = this.options[select.selectedIndex];
+        input.value = productos[selectedOption.value].cantidad; 
+        /* var suma = parseInt(selectedOption.value)  + 1;
+        console.log(suma); */
+    });
+    
+    
+}
+
+// ________________________________________________________
+
+// Envio de la información al servidor y la bd
+function enviarProductoActualizar() {
+    ajax.open("GET", "actualizarproducto.php?" + obtenerQueryProductoActualizado(), true);
+    ajax.onreadystatechange = respuestaAgregar;
+    ajax.send();    
+}
+
+function respuestaAgregar() {
+    if (ajax.readyState == 4 && ajax.status == 200) {
+        var respuesta = JSON.parse(ajax.responseText);
+        alert(respuesta.mensaje)
+    }
+}
+
+function obtenerQueryProductoActualizado() {
+    var id = document.getElementById("nombre").value;
+    var cantidad = document.getElementById("cantidad").value;
+    var queryString = "id=" + encodeURIComponent(id) + "&cantidad=" + encodeURIComponent(cantidad) + "&nocache=" + Math.random();
+    return queryString;
 }
