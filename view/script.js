@@ -1,6 +1,3 @@
-// ________________________________________________________
-
-// ajax, para poder interactuar con el servidor.
 function obtenerAjax() {    
     if (window.XMLHttpRequest) {
         xhttp = new XMLHttpRequest();
@@ -20,9 +17,10 @@ window.onload = function() {
 }
 
 function cargarPlantilla(plantilla) {
-    ajax.open("GET", plantilla, true);
+    ajax.open("GET", "view/" + plantilla);
     ajax.onreadystatechange = respuestaCargar;
-    ajax.send();
+    ajax.send(null);
+    /* ajax.send(); = ajax.send(null);*/
 }
 
 function respuestaCargar() {
@@ -35,9 +33,9 @@ function respuestaCargar() {
 
 // Petición al servidor para cargar la plantilla mostrar
 function cargarMostrar() {
-    ajax.open("GET", "mostrar.html", true);
+    ajax.open("GET", "view/mostrar.html", true);
     ajax.onreadystatechange = respuestaMostrar;
-    ajax.send();
+    ajax.send(null);
 }
 
 function respuestaMostrar() {
@@ -51,7 +49,7 @@ function respuestaMostrar() {
 
 // Envio de la información al servidor y la bd
 function enviarProducto() {
-    ajax.open("GET", "agregarproducto.php?" + obtenerQueryProducto(), true);
+    ajax.open("GET", "model/agregarproducto.php?" + obtenerQueryProducto(), true);
     ajax.onreadystatechange = respuestaAgregar;
     ajax.send();    
 }
@@ -64,10 +62,9 @@ function respuestaAgregar() {
 }
 
 function obtenerQueryProducto() {
-    var id = document.getElementById("id").value;
     var nombre = document.getElementById("nombre").value;
-    var cantidad = document.getElementById("cantidad").value;
-    var queryString = "id=" + encodeURIComponent(id) + "&nombre=" + encodeURIComponent(nombre) + "&cantidad=" + encodeURIComponent(cantidad) + "&nocache=" + Math.random();
+    var cantidad = document.getElementById("cantidad").value;    
+    var queryString = "nombre=" + encodeURIComponent(nombre) + "&cantidad=" + encodeURIComponent(cantidad) + "&nocache=" + Math.random();
     return queryString;
 }
 
@@ -76,7 +73,7 @@ function obtenerQueryProducto() {
 /* Función para solicitar los productos al 
 servidor y mostrar los datos */
 function cargarTabla() {
-    ajax.open("GET", "consultarproductos.php", true);
+    ajax.open("GET", "model/consultarproductos.php");
     ajax.onreadystatechange = respuestaTabla;
     ajax.send();       
 }
@@ -119,7 +116,7 @@ function cargarDatos(productos) {
 
 // Petición al servidor para cargar la plantilla actulizar
 function cargarMostrarActualizar() {
-    ajax.open("GET", "actualizar.html", true);
+    ajax.open("GET", "view/actualizar.html", true);
     ajax.onreadystatechange = respuestaMostrarActualizar;
     ajax.send();
 }
@@ -136,7 +133,7 @@ function respuestaMostrarActualizar() {
 /* Función para solicitar los productos al 
 servidor y mostrar los datos */
 function cargarTablaActualizar() {
-    ajax.open("GET", "consultarproductos.php", true);
+    ajax.open("GET", "model/consultarproductos.php", true);
     ajax.onreadystatechange = respuestaTablaActualizar;
     ajax.send();       
 }
@@ -165,7 +162,7 @@ function cargarDatosAcBo(productos) {
         option.value = productos[i].id;
         option.valor = i;
         var nombre = document.createTextNode(productos[i].nombre);
-        option.appendChild(nombre);   
+        option.appendChild(nombre);
     }
     /* ______________________________________________________*/
     /* addEvenListener para obtener el index de los elmentos
@@ -190,7 +187,7 @@ function cargarDatosAcBo(productos) {
 
 // Envio de la información al servidor y la bd
 function enviarProductoActualizar() {
-    ajax.open("GET", "actualizarproducto.php?" + obtenerQueryProductoActualizado(), true);
+    ajax.open("GET", "model/actualizarproducto.php?" + obtenerQueryProductoActualizado(), true);
     ajax.onreadystatechange = respuestaAgregar;
     ajax.send();    
 }
@@ -214,7 +211,7 @@ function obtenerQueryProductoActualizado() {
 
 // Petición al servidor para cargar la plantilla borrar
 function cargarMostrarBorrar() {
-    ajax.open("GET", "borrar.html", true);
+    ajax.open("GET", "view/borrar.html", true);
     ajax.onreadystatechange = respuestaMostrarActualizar;
     ajax.send();
 }
@@ -231,7 +228,7 @@ function respuestaMostrarActualizar() {
 /* Función para solicitar los productos al 
 servidor y mostrar los datos */
 function cargarTablaActualizar() {
-    ajax.open("GET", "consultarproductos.php", true);
+    ajax.open("GET", "model/consultarproductos.php", true);
     ajax.onreadystatechange = respuestaTablaActualizar;
     ajax.send();       
 }
@@ -251,7 +248,7 @@ function respuestaTablaActualizar() {
 
 // Envio de la información al servidor y la bd
 function enviarProductoBorrar() {
-    ajax.open("GET", "eliminarproducto.php?" + obtenerQueryProductoBorrar(), true);
+    ajax.open("GET", "model/eliminarproducto.php?" + obtenerQueryProductoBorrar(), true);
     ajax.onreadystatechange = respuestaBorrar;
     ajax.send();    
 }
@@ -271,24 +268,9 @@ function obtenerQueryProductoBorrar() {
 
 // ________________________________________________________
 
-// Petición al servidor para cargar la plantilla borrar
-function cargarMostrarBuscar() {
-    ajax.open("GET", "buscar.html", true);
-    ajax.onreadystatechange = respuestaMostrarBuscar;
-    ajax.send();
-}
-
-function respuestaMostrarBuscar() {
-    if (ajax.readyState == 4 && ajax.status == 200) {
-        document.getElementById("contenido").innerHTML = ajax.responseText;
-    }
-}
-
-// ________________________________________________________
-
 // Envio de la información al servidor y la bd
 function enviarProductoBuscar() {
-    ajax.open("GET", "buscarproducto.php?" + obtenerQueryProductoBuscar(), true);
+    ajax.open("GET", "model/buscarproducto.php?" + obtenerQueryProductoBuscar(), true);
     ajax.onreadystatechange = respuestaBuscar;
     ajax.send();    
 }
