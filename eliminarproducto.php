@@ -1,5 +1,5 @@
 <?php 
-    // -----:::::----- Actualizar producto -----:::::-----
+    // -----:::::----- Eliminar producto -----:::::-----
     require_once "Conexion.php";
     $conexion = new Conexion();
     /* ___________________________ */
@@ -9,8 +9,7 @@
     $conexion->abrir() == 0;
     $valor = $_GET["id"];
     $id = (int) $valor;
-    $cantidad = $_GET["cantidad"];
-    $sql = "UPDATE productos SET cantidad=$cantidad  WHERE id=$id";
+    $sql = "DELETE FROM productos WHERE id=$id";
     /* ___________________________ */
     /* Enviará a la función consulta de la conexión
     el insert */
@@ -22,10 +21,10 @@
     las filas afectadas mayores o no a 0 */
     if ($conexion->obtenerFilasAfectadas() > 0) {
         $respuesta["accion"] = 1;
-        $respuesta["mensaje"] = "Producto actualizado con exito";
+        $respuesta["mensaje"] = "Producto eliminado con exito";
     } else {
         $respuesta["accion"] = 0;
-        $respuesta["mensaje"] = "Producto no pudo ser actualizado";
+        $respuesta["mensaje"] = "Producto no pudo ser eliminado";
     }
     /* ___________________________ */
     /* Envío del array */

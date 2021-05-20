@@ -117,7 +117,7 @@ function cargarDatos(productos) {
 
 // ________________________________________________________
 
-// Petición al servidor para cargar la plantilla mostrar actulizar
+// Petición al servidor para cargar la plantilla actulizar
 function cargarMostrarActualizar() {
     ajax.open("GET", "actualizar.html", true);
     ajax.onreadystatechange = respuestaMostrarActualizar;
@@ -147,22 +147,23 @@ function respuestaTablaActualizar() {
         if (respuesta.accion == 0) {
             alert(respuesta.mensaje);
         }else{
-            cargarDatosActualizar(respuesta.productos);
+            cargarDatosAcBo(respuesta.productos);
         }
     }
 }
 
 // ________________________________________________________
 
-// Función para cargar los datos de los productos
-function cargarDatosActualizar(productos) {
+// Función para cargar los datos de los productos Actualizar
+function cargarDatosAcBo(productos) {
     select = document.getElementById("nombre");
 
     input = document.getElementById("cantidad");
     for (var i = 0; i < productos.length; i++) {
         var option = document.createElement("option");
         select.appendChild(option);
-        option.value = i;
+        option.value = productos[i].id;
+        option.valor = i;
         var nombre = document.createTextNode(productos[i].nombre);
         option.appendChild(nombre);   
     }
@@ -173,9 +174,13 @@ function cargarDatosActualizar(productos) {
     select.addEventListener('change',
     function(){
         var selectedOption = this.options[select.selectedIndex];
-        input.value = productos[selectedOption.value].cantidad; 
+        /* ______________________________________________________ */
+        /* Ese dato .valor es tipo de dato en realidad data-*
+        En este caso data-valor que almacena valores*/
+        input.value = productos[selectedOption.valor].cantidad; 
         /* var suma = parseInt(selectedOption.value)  + 1;
         console.log(suma); */
+        /* console.log(productos[selectedOption.valor].cantidad); */
     });
     
     
@@ -202,4 +207,131 @@ function obtenerQueryProductoActualizado() {
     var cantidad = document.getElementById("cantidad").value;
     var queryString = "id=" + encodeURIComponent(id) + "&cantidad=" + encodeURIComponent(cantidad) + "&nocache=" + Math.random();
     return queryString;
+}
+
+
+// ________________________________________________________
+
+// Petición al servidor para cargar la plantilla borrar
+function cargarMostrarBorrar() {
+    ajax.open("GET", "borrar.html", true);
+    ajax.onreadystatechange = respuestaMostrarActualizar;
+    ajax.send();
+}
+
+function respuestaMostrarActualizar() {
+    if (ajax.readyState == 4 && ajax.status == 200) {
+        document.getElementById("contenido").innerHTML = ajax.responseText;
+        cargarTablaActualizar();
+    }
+}
+
+// ________________________________________________________
+
+/* Función para solicitar los productos al 
+servidor y mostrar los datos */
+function cargarTablaActualizar() {
+    ajax.open("GET", "consultarproductos.php", true);
+    ajax.onreadystatechange = respuestaTablaActualizar;
+    ajax.send();       
+}
+
+function respuestaTablaActualizar() {
+    if (ajax.readyState == 4 && ajax.status == 200) {
+        var respuesta = JSON.parse(ajax.responseText);
+        if (respuesta.accion == 0) {
+            alert(respuesta.mensaje);
+        }else{
+            cargarDatosAcBo(respuesta.productos);
+        }
+    }
+}
+
+// ________________________________________________________
+
+// Envio de la información al servidor y la bd
+function enviarProductoBorrar() {
+    ajax.open("GET", "eliminarproducto.php?" + obtenerQueryProductoBorrar(), true);
+    ajax.onreadystatechange = respuestaBorrar;
+    ajax.send();    
+}
+
+function respuestaBorrar() {
+    if (ajax.readyState == 4 && ajax.status == 200) {
+        var respuesta = JSON.parse(ajax.responseText);
+        alert(respuesta.mensaje)
+    }
+}
+
+function obtenerQueryProductoBorrar() {
+    var id = document.getElementById("nombre").value;
+    var queryString = "id=" + encodeURIComponent(id) + "&nocache=" + Math.random();
+    return queryString;
+}
+
+// ________________________________________________________
+
+// Petición al servidor para cargar la plantilla borrar
+function cargarMostrarBuscar() {
+    ajax.open("GET", "buscar.html", true);
+    ajax.onreadystatechange = respuestaMostrarBuscar;
+    ajax.send();
+}
+
+function respuestaMostrarBuscar() {
+    if (ajax.readyState == 4 && ajax.status == 200) {
+        document.getElementById("contenido").innerHTML = ajax.responseText;
+    }
+}
+
+// ________________________________________________________
+
+// Envio de la información al servidor y la bd
+function enviarProductoBuscar() {
+    ajax.open("GET", "buscarproducto.php?" + obtenerQueryProductoBuscar(), true);
+    ajax.onreadystatechange = respuestaBuscar;
+    ajax.send();    
+}
+
+function respuestaBuscar() {
+    if (ajax.readyState == 4 && ajax.status == 200) {
+        var respuesta = JSON.parse(ajax.responseText);
+        if (respuesta.accion == 0) {
+            alert(respuesta.mensaje);
+        }else{
+            cargarProducto(respuesta.productos)
+        }
+        alert(respuesta.mensaje)
+    }
+}
+
+function obtenerQueryProductoBuscar() {
+    var nombre = document.getElementById("nombre").value;
+    
+    var queryString = "nombre=" + encodeURIComponent(nombre) + "&nocache=" + Math.random();
+    
+    return queryString;
+
+}
+
+// ________________________________________________________
+
+// Función para cargar los datos del producto
+function cargarProducto(productos) {
+    tabla = document.getElementById("tabla");
+    var fila = document.createElement("tr");
+    tabla.appendChild(fila);
+    var celda1 = document.createElement("td");
+    fila.appendChild(celda1);
+    var id = document.createTextNode(productos[0].id);
+    celda1.appendChild(id);
+    var celda2 = document.createElement("td");
+    fila.appendChild(celda2);
+    var nombre = document.createTextNode(productos[0].nombre);
+    celda2.appendChild(nombre);
+    var celda3 = document.createElement("td");
+    fila.appendChild(celda3);
+    var cantidad = document.createTextNode(productos[0].cantidad);
+    celda3.appendChild(cantidad);
+    
 }
