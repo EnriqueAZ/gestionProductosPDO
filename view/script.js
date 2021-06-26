@@ -280,10 +280,13 @@ function respuestaBuscar() {
         var respuesta = JSON.parse(ajax.responseText);
         if (respuesta.accion == 0) {
             alert(respuesta.mensaje);
+            tabla = document.getElementById("tabla");
+            tabla.innerHTML = "";
         }else{
             cargarProducto(respuesta.productos)
+            alert(respuesta.mensaje)
         }
-        alert(respuesta.mensaje)
+        
     }
 }
 
@@ -300,20 +303,24 @@ function obtenerQueryProductoBuscar() {
 
 // Función para cargar los datos del producto
 function cargarProducto(productos) {
+    // console.log(productos)
+    // tabla = document.getElementById("tabla") = "";
+    tabla.innerHTML = "";
     tabla = document.getElementById("tabla");
-    var fila = document.createElement("tr");
-    tabla.appendChild(fila);
-    var celda1 = document.createElement("td");
-    fila.appendChild(celda1);
-    var id = document.createTextNode(productos[0].id);
-    celda1.appendChild(id);
-    var celda2 = document.createElement("td");
-    fila.appendChild(celda2);
-    var nombre = document.createTextNode(productos[0].nombre);
-    celda2.appendChild(nombre);
-    var celda3 = document.createElement("td");
-    fila.appendChild(celda3);
-    var cantidad = document.createTextNode(productos[0].cantidad);
-    celda3.appendChild(cantidad);
-    
+    for (var i = 0; i < productos.length; i++) {
+        var fila = document.createElement("tr");
+        tabla.appendChild(fila);
+        var celda1 = document.createElement("td");
+        fila.appendChild(celda1);
+        var id = document.createTextNode(productos[i].id);
+        celda1.appendChild(id);
+        var celda2 = document.createElement("td");
+        fila.appendChild(celda2);
+        var nombre = document.createTextNode(productos[i].nombre);
+        celda2.appendChild(nombre);
+        var celda3 = document.createElement("td");
+        fila.appendChild(celda3);
+        var cantidad = document.createTextNode(productos[i].cantidad);
+        celda3.appendChild(cantidad);
+    }
 }

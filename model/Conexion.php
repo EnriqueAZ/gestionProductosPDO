@@ -42,9 +42,11 @@
         /* ______________________________________________________ */
         /* Obtener producto por el nombre */
         public function obtenerProductoNombre($nombre){
-            $consulta = $this->conexion->prepare("SELECT * FROM productos WHERE  nombre = ?");
-            $consulta->bindParam(1, $nombre);
-            $consulta->setFetchMode(PDO::FETCH_OBJ);
+            $consulta = $this->conexion->prepare("SELECT * FROM productos WHERE nombre LIKE '%".$nombre."%' ");
+            // Ya que es una sola variable no hay necesiadad de utilizar bindParam eso y que no entra como clase
+            // $consulta = $this->conexion->prepare("SELECT * FROM productos WHERE nombre LIKE '","%?%","' ");
+            // $consulta->bindParam(1, $nombre);
+            $consulta->setFetchMode(PDO::FETCH_ASSOC);
             $consulta->execute();
             return $consulta->fetchAll();
         }
